@@ -1,0 +1,14 @@
+{
+  "name": "day-1",
+  "version": "1.0.0",
+  "description": "## NPM NPM (Node Package Manager) is a tool/software helps us to manage our Node.JS project.",
+  "main": "1 - sum less m.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.4.0"
+  }
+}

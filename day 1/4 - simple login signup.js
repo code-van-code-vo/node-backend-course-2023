@@ -13,3 +13,7 @@
 //   Computer: Enter your password
 //   User: 123456789
 //   Computer: You are logined as khoa123
+
+const users = []
+
+const prompt = require('prompt-sync')();

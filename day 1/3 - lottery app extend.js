@@ -25,20 +25,21 @@ function insertUser(n, a) {
     users.push(user)
 }
 
-function getUsersFromFile(filename) {
-    const fileCallback = function(err, data) {
-        const lines = data.split('\n')
-        for (let i = 0; i < lines.length; i++) {
-            let line = lines[i].split(' ')
-            let name = line[0]
-            let age = line[1]
-            insertUser(name, age)
-        }
-        const winningUser = randElementInArray(users)
-        console.log(`${winningUser.name} has won a lottery ticket at age ${winningUser.age}`)
-    }
+function getUsersFromFile(filename, callback) {
 
-    fs.readFile(filename, 'utf8', fileCallback)
+    fs.readFile(filename, 'utf8', (err, data) => {
+        callback(data)
+    })
 }
 
-getUsersFromFile('3 - users.txt')
+getUsersFromFile('3 - users.txt', (data) => {
+    const lines = data.split('\n')
+    for (let i = 0; i < lines.length; i++) {
+        let line = lines[i].split(' ')
+        let name = line[0]
+        let age = line[1]
+        insertUser(name, age)
+    }
+    const winningUser = randElementInArray(users)
+    console.log(`${winningUser.name} has won a lottery ticket at age ${winningUser.age}`)
+})

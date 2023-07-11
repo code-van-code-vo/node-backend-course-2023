@@ -5,3 +5,7 @@ function fetchQuestions(nQuestion, callback) {
         callback(res.data.results)
     })
 }
+
+fetchQuestions(10, (questions) => {
+    console.log(questions)
+})
