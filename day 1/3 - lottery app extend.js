@@ -40,6 +40,14 @@ getUsersFromFile('3 - users.txt', (data) => {
         let age = line[1]
         insertUser(name, age)
     }
+    users = users.filter(user => {
+        if (user.age < 18) {
+            return false
+        } else {
+            return true
+        }
+    })
+    console.log(users)
     const winningUser = randElementInArray(users)
     console.log(`${winningUser.name} has won a lottery ticket at age ${winningUser.age}`)
 })
