@@ -1,4 +1,5 @@
-const express = require('express')
+import express from 'express'
+import { getBooks } from './bookstore.js' 
 
 const server = express()
 const PORT = 3000
@@ -7,6 +8,10 @@ const PORT = 3000
 // res: response
 server.get('/', (req, res) => {
     res.send('Welcome to my server')
+})
+
+server.get('/books', (req, res) => {
+    res.send(getBooks())
 })
 
 server.listen(PORT, () => {
