@@ -21,12 +21,22 @@ server.get('/books', (req, res) => {
 
 server.get('/books/:id', (req, res) => {
     const bookId = parseInt(req.params.id)
-    res.send(findBookById(bookId))
+    const book = findBookById(bookId)
+    if (!book) {
+        res.status(404).send('Book not found')
+    } else {
+        res.send(book)
+    }
 })
 
 server.post('/books', (req, res) => {
-    addBook(req.body)
-    res.send('Book Added')
+    const book = req.body
+    if (book?.id && book?.title && book?.author) {
+        addBook(req.body)
+        res.send('Book Added')
+    } else {
+        res.status(400).send('Missing field')
+    }
 })
 
 server.put('/books', (req, res) => {
