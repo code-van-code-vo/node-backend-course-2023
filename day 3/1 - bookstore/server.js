@@ -1,5 +1,7 @@
 import express from 'express'
-import { getBooks } from './bookstore.js' 
+import { getBooks, findBookById } from './bookstore.js'
+// const express = require('express')
+// const { getBooks } = require('./bookstore.js')
 
 const server = express()
 const PORT = 3000
@@ -12,6 +14,12 @@ server.get('/', (req, res) => {
 
 server.get('/books', (req, res) => {
     res.send(getBooks())
+})
+
+server.get('/books/:id', (req, res) => {
+    console.log(req.params)
+    const bookId = req.params.id
+    res.send(findBookById(bookId))
 })
 
 server.listen(PORT, () => {
