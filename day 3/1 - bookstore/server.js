@@ -1,5 +1,6 @@
 import express from 'express'
 import bodyParser from 'body-parser'
+import cors from 'cors'
 import { getBooks, findBookById, addBook, updateBook, deleteBookById } from './bookstore.js'
 // const express = require('express')
 // const { getBooks } = require('./bookstore.js')
@@ -7,6 +8,7 @@ import { getBooks, findBookById, addBook, updateBook, deleteBookById } from './b
 const server = express()
 const PORT = 3000
 
+server.use(cors())
 server.use(bodyParser.json())
 
 // req: request

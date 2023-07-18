@@ -7,6 +7,7 @@ server.get('/', (request, response) => {
     console.log('new user came')
     response.send('Welcome to my website')
 })
+
 server.get('/about', (request, response) => {
     response.send('This is about page')
 })
