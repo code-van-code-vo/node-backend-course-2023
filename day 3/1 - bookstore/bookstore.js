@@ -8,7 +8,11 @@ export function getBooks() {
 }
 
 export function addBook(book) {
-    books.push(book)
+    books.push({
+        id: books.length+1,
+        title: book.title,
+        author: book.author,
+    })
 }
 
 export function findBookById(bookId) {
@@ -23,9 +27,9 @@ export function deleteBookById(bookId) {
     })
 }
 
-export function updateBook(book) {
+export function updateBookById(bookId, book) {
     const bookIndex = books.findIndex(eachBook => {
-        return eachBook.id === book.id
+        return eachBook.id === bookId
     })
     books[bookIndex].title = book.title
     books[bookIndex].author = book.author

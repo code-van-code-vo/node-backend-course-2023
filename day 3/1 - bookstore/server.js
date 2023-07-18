@@ -1,7 +1,7 @@
 import express from 'express'
 import bodyParser from 'body-parser'
 import cors from 'cors'
-import { getBooks, findBookById, addBook, updateBook, deleteBookById } from './bookstore.js'
+import { getBooks, findBookById, addBook, updateBookById, deleteBookById } from './bookstore.js'
 // const express = require('express')
 // const { getBooks } = require('./bookstore.js')
 
@@ -41,8 +41,10 @@ server.post('/books', (req, res) => {
     }
 })
 
-server.put('/books', (req, res) => {
-    updateBook(req.body)
+server.put('/books/:id', (req, res) => {
+    const bookId = parseInt(req.params.id)
+
+    updateBookById(bookId, req.body)
     res.send('Book updated')
 })
 
