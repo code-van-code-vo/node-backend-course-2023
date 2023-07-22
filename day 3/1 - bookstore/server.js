@@ -33,11 +33,11 @@ server.get('/books/:id', (req, res) => {
 
 server.post('/books', (req, res) => {
     const book = req.body
-    if (book?.id && book?.title && book?.author) {
+    if (book?.title && book?.author) {
         addBook(req.body)
         res.send('Book Added')
     } else {
-        res.status(400).send('Missing field')
+        res.status(404).send('Missing field')
     }
 })
 
