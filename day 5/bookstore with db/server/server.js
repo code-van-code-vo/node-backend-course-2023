@@ -4,9 +4,10 @@ import express from 'express'
 import bodyParser from 'body-parser'
 import cors from 'cors'
 
-import bookRouter from './routes/books.js'
+import './database/database.js'
+
 import indexRouter from './routes/index.js'
-import overwriteResponseJSON from './middlewares/overwriteResponseJSON.js'
+import bookRouter from './routes/books.js'
 
 // ===== Config =====
 const server = express()
@@ -15,7 +16,6 @@ const PORT = process.env.PORT || 3000
 // ===== Middlewares =====
 server.use(cors())
 server.use(bodyParser.json())
-server.use(overwriteResponseJSON)
 
 // ===== Routes =====
 server.use('/', indexRouter)

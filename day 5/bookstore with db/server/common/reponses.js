@@ -10,14 +10,14 @@ export function DataResponse(data) {
     return Response(200, 'OK', data)
 }
 
-export function ErrorResponse(errorCode, errorMessage) {
-    return Response(errorCode, errorMessage)
-}
-
 export function NotFoundResponse() {
     return ErrorResponse(404, 'Not Found')
 }
 
 export function MissingFieldResponse() {
     return ErrorResponse(400, 'Missing field')
+}
+
+export function ErrorResponse(errorCode, errorMessage) {
+    return Response(errorCode, errorMessage)
 }
