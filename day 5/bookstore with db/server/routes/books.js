@@ -1,5 +1,5 @@
 import express from 'express'
-import { MessageResponse, DataResponse, Response } from '../common/reponses.js'
+import { MessageResponse, DataResponse, Response, InternalErrorResponse } from '../common/reponses.js'
 
 import Book from '../models/Book.js'
 
@@ -24,9 +24,13 @@ router.get('/:id', async (req, res) => {
 router.post('/', async (req, res) => {
     const bookData = req.body
 
-    const book = await Book.create(bookData)
-    console.log(book)
-    res.json(DataResponse(book))
+    try {
+        const book = await Book.create(bookData)
+        console.log(book)
+        res.json(DataResponse(book))
+    } catch(err) {
+        res.json(InternalErrorResponse())
+    }
 })
 
 export default router
