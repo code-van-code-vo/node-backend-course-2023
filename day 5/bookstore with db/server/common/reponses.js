@@ -18,6 +18,10 @@ export function MissingFieldResponse() {
     return ErrorResponse(400, 'Missing field')
 }
 
+export function InternalErrorResponse() {
+    return Response(500, "Internal server error")
+}
+
 export function ErrorResponse(errorCode, errorMessage) {
     return Response(errorCode, errorMessage)
 }
