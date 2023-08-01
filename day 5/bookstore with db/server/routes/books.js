@@ -1,5 +1,5 @@
 import express from 'express'
-import { MessageResponse, DataResponse, Response, InternalErrorResponse } from '../common/reponses.js'
+import { MessageResponse, DataResponse, Response, InternalErrorResponse, NotFoundResponse } from '../common/reponses.js'
 
 import Book from '../models/Book.js'
 
@@ -29,7 +29,39 @@ router.post('/', async (req, res) => {
         console.log(book)
         res.json(DataResponse(book))
     } catch(err) {
+        console.log(err)
         res.json(InternalErrorResponse())
+    }
+})
+
+router.delete('/:id', async (req, res) => {
+    const id = parseInt(req.params.id)
+
+    const result = await Book.destroy({
+        where: {
+            id: id,
+        }
+    })
+    if (result === 0) {
+        res.json(NotFoundResponse())
+    } else {
+        res.json(MessageResponse('book deleted'))
+    }
+})
+
+router.put('/:id', async (req, res) => {
+    const id = parseInt(req.params.id)
+    const bookData = req.body
+
+    const result = await Book.update(bookData, {
+        where: {
+            id: id
+        },
+    })
+    if (result[0] === 0) {
+        res.json(NotFoundResponse())
+    } else {
+        res.json(MessageResponse('book updated'))
     }
 })
 
