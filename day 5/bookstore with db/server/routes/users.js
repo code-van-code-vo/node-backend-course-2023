@@ -59,7 +59,8 @@ router.post('/login', async (req, res) => {
     )
     if (isMatchPassword) {
         const payload = {
-            username: user.username
+            username: user.username,
+            role: user.role,
         }
         const token = jwt.sign(payload, process.env.SECRET)
         res.json(DataResponse({
