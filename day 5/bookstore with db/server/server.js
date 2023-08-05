@@ -16,6 +16,9 @@ const PORT = process.env.PORT || 3000
 // ===== Middlewares =====
 server.use(cors())
 server.use(bodyParser.json())
+server.use(bodyParser.urlencoded({ extended: true }))
+server.use('/public', express.static('public'))
+server.use('/public', express.static('public/images'))
 
 // ===== Routes =====
 server.use('/', indexRouter)
