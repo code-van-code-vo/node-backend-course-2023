@@ -8,6 +8,7 @@ import './database/database.js'
 
 import indexRouter from './routes/index.js'
 import bookRouter from './routes/books.js'
+import userRouter from './routes/users.js'
 
 // ===== Config =====
 const server = express()
@@ -23,6 +24,7 @@ server.use('/public', express.static('public/images'))
 // ===== Routes =====
 server.use('/', indexRouter)
 server.use('/books', bookRouter)
+server.use('/users', userRouter)
 
 server.listen(PORT, () => {
     console.log(`Server is listening at PORT=${PORT}`)

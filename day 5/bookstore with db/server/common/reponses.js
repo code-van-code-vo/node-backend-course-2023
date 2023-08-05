@@ -25,3 +25,7 @@ export function InternalErrorResponse() {
 export function ErrorResponse(errorCode, errorMessage) {
     return Response(errorCode, errorMessage)
 }
+
+export function UnauthorizedResponse() {
+    return ErrorResponse(401, 'Unauthorized')
+}
