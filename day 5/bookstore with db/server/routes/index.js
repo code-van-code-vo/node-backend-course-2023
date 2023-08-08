@@ -1,7 +1,7 @@
 import express from 'express'
 import { DataResponse, MessageResponse } from '../common/reponses.js'
 import fileUpload from 'express-fileupload'
-import authUser from '../middlewares/authUser.js'
+import { requireRole } from '../middlewares/auth.js'
 
 const router = express.Router()
 
@@ -9,8 +9,10 @@ router.get('/', (req, res) => {
     res.json(MessageResponse('Welcome to my server'))
 })
 
-router.get('/do_something', authUser, (req, res) => {
-    res.json(MessageResponse('Do something'))
+router.get('/do_something', requireRole('user'), (req, res) => {
+    const userData = res.locals.userData
+
+    res.json(MessageResponse(`You are login as ${userData.username}`))
 })
 
 router.post('/upload', fileUpload(), (req, res) => {

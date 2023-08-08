@@ -59,10 +59,14 @@ router.post('/login', async (req, res) => {
     )
     if (isMatchPassword) {
         const payload = {
+            id: user.id,
             username: user.username,
             role: user.role,
         }
-        const token = jwt.sign(payload, process.env.SECRET)
+        const token = jwt.sign(payload, process.env.SECRET, {
+            expiresIn: '3h'
+        })
+        res.cookie('token', token)
         res.json(DataResponse({
             token: token
         }))
