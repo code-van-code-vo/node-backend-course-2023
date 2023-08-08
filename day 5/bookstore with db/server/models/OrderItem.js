@@ -29,6 +29,9 @@ const OrderItem = sequelize.define(tableName, {
     }
 })
 
+Order.hasMany(OrderItem)
+OrderItem.belongsTo(Order)
+
 sequelize.sync().then(() => {
     console.log(`${tableName} table created successfully!`)
 })
