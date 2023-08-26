@@ -13,14 +13,14 @@ const OrderItem = sequelize.define(tableName, {
         type: DataTypes.INTEGER,
         references: {
             model: Order,
-            id: 'id',
+            key: 'id',
         }
     },
     bookId: {
         type: DataTypes.INTEGER,
         references: {
             model: Book,
-            id: 'id',
+            key: 'id',
         }
     },
     amount: {
@@ -29,8 +29,13 @@ const OrderItem = sequelize.define(tableName, {
     }
 })
 
-Order.hasMany(OrderItem)
+Order.hasMany(OrderItem, {
+    as: 'items'
+})
 OrderItem.belongsTo(Order)
+
+Book.hasMany(OrderItem)
+OrderItem.belongsTo(Book)
 
 sequelize.sync().then(() => {
     console.log(`${tableName} table created successfully!`)

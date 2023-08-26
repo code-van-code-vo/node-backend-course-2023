@@ -1,5 +1,6 @@
 import express from 'express'
 import { MessageResponse, DataResponse, Response, InternalErrorResponse, NotFoundResponse } from '../common/reponses.js'
+import { requireRole } from '../middlewares/auth.js'
 
 import Book from '../models/Book.js'
 
@@ -34,7 +35,7 @@ router.post('/', async (req, res) => {
     }
 })
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', requireRole('admin'), async (req, res) => {
     const id = parseInt(req.params.id)
 
     const result = await Book.destroy({
