@@ -1,13 +1,29 @@
 import express from 'express'
-import { MessageResponse, DataResponse, Response, InternalErrorResponse, NotFoundResponse } from '../common/reponses.js'
+import { Op } from 'sequelize'
+import { MessageResponse, DataResponse, Response, InternalErrorResponse, NotFoundResponse, InvalidTypeResponse } from '../common/reponses.js'
 import { requireRole } from '../middlewares/auth.js'
 
 import Book from '../models/Book.js'
+import fileUpload from 'express-fileupload'
 
 const router = express.Router()
 
 router.get('/', async (req, res) => {
-    const books = await Book.findAll()
+    const pageNo = parseInt(req.query.page_no) || 1
+    const limit = parseInt(req.query.limit) || 10
+    const title = req.query.title
+    console.log(pageNo, limit)
+
+    const books = await Book.findAll({
+        limit: limit,
+        offset: (pageNo-1)*limit,
+        where: {
+            title: {
+                [Op.like]: '%' + title
+            }
+        },
+    })
+    
     res.json(DataResponse(books))
 })
 
@@ -19,34 +35,65 @@ router.get('/:id', async (req, res) => {
             id: id,
         }
     })
-    res.json(DataResponse(book))
+
+    if (book == null) {
+        res.json(NotFoundResponse())
+    } else {
+        res.json(DataResponse(book))
+    }
 })
 
-router.post('/', async (req, res) => {
-    const bookData = req.body
+router.post('/', requireRole('user'), fileUpload(), async (req, res) => {
+    const { title, author, summary } = req.body
+    const thumbnailImage = req.files.thumbnail_image
+    const userId = res.locals.userData.id
 
+    const [fileType, fileExt] = thumbnailImage.mimetype.split('/')
+
+    const savePath = `./public/images/${Date.now()}_${title.replace(' ', '-')}.${fileExt}`
+    const allowExtensions = ['png', 'jpg', 'jpeg']
+    if (fileType !== 'image' || !allowExtensions.includes(fileExt)) {
+        res.json(InvalidTypeResponse())
+        return;
+    }
+
+    thumbnailImage.mv(savePath)
     try {
-        const book = await Book.create(bookData)
-        console.log(book)
-        res.json(DataResponse(book))
+        let book = await Book.create({
+            title,
+            author,
+            summary,
+            thumbnailImage: savePath,
+            creatorId: userId,
+        })
+        res.json(DataResponse({
+            id: book.id,
+            thumbnailImage: savePath,
+        }))
     } catch(err) {
         console.log(err)
         res.json(InternalErrorResponse())
     }
 })
 
-router.delete('/:id', requireRole('admin'), async (req, res) => {
+router.delete('/:id', requireRole('admin'), async (req, res, next) => {
     const id = parseInt(req.params.id)
 
-    const result = await Book.destroy({
-        where: {
-            id: id,
+    try {
+        const result = await Book.destroy({
+            where: {
+                id: id,
+            }
+        })
+
+        if (result === 0) {
+            res.json(NotFoundResponse())
+        } else {
+            res.json(MessageResponse('book deleted'))
         }
-    })
-    if (result === 0) {
-        res.json(NotFoundResponse())
-    } else {
-        res.json(MessageResponse('book deleted'))
+    } catch(err) {
+        console.log(err)
+        res.json(InternalErrorResponse())
     }
 })
 

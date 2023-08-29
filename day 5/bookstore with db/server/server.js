@@ -7,6 +7,7 @@ import cors from 'cors'
 
 import './database/database.js'
 
+import overwriteResponseJSON from './middlewares/overwriteResponseJSON.js'
 import indexRouter from './routes/index.js'
 import bookRouter from './routes/books.js'
 import userRouter from './routes/users.js'
@@ -21,6 +22,7 @@ server.use(cors())
 server.use(bodyParser.json())
 server.use(bodyParser.urlencoded({ extended: true }))
 server.use(cookieParser())
+server.use(overwriteResponseJSON)
 server.use('/public', express.static('public'))
 server.use('/public', express.static('public/images'))
 

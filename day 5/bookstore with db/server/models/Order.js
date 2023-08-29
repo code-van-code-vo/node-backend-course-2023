@@ -10,6 +10,7 @@ const Order = sequelize.define(tableName, {
     ...SQLModel,
     userId: {
         type: DataTypes.INTEGER,
+        allowNull: false,
         references: {
             model: User,
             key: 'id',
@@ -20,7 +21,7 @@ const Order = sequelize.define(tableName, {
 User.hasMany(Order)
 Order.belongsTo(User)
 
-sequelize.sync().then(() => {
+Order.sync().then(() => {
     console.log(`${tableName} table created successfully!`)
 })
 

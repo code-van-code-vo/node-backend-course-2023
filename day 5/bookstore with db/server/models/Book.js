@@ -2,6 +2,7 @@ import { Sequelize, DataTypes } from 'sequelize'
 import sequelize from '../database/database.js'
 
 import SQLModel from '../common/SQLModel.js'
+import User from './User.js'
 
 // books: table name that Book mapping to
 const Book = sequelize.define('books', {
@@ -18,7 +19,21 @@ const Book = sequelize.define('books', {
         type: DataTypes.STRING(511),
         allowNull: true,
     },
+    creatorId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+            model: User,
+            key: 'id',
+        }
+    },
+    thumbnailImage: {
+        type: DataTypes.STRING,
+    },
 })
+
+User.hasMany(Book)
+Book.belongsTo(User)
 
 Book.sync().then(() => {
     console.log('books table created')

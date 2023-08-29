@@ -22,7 +22,7 @@ const User = sequelize.define(tableName, {
     }
 })
 
-sequelize.sync().then(() => {
+User.sync().then(() => {
     console.log(`${tableName} table created successfully!`)
 })
 
