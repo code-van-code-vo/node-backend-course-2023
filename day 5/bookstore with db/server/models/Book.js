@@ -32,8 +32,12 @@ const Book = sequelize.define('books', {
     },
 })
 
-User.hasMany(Book)
-Book.belongsTo(User)
+User.hasMany(Book, {
+    foreignKey: 'creatorId'
+})
+Book.belongsTo(User, {
+    foreignKey: 'creatorId'
+})
 
 Book.sync().then(() => {
     console.log('books table created')
