@@ -11,7 +11,7 @@ const router = express.Router()
 router.get('/', async (req, res) => {
     const pageNo = parseInt(req.query.page_no) || 1
     const limit = parseInt(req.query.limit) || 10
-    const title = req.query.title
+    const title = req.query.title || ''
     console.log(pageNo, limit)
 
     const books = await Book.findAll({
