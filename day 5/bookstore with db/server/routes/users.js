@@ -1,7 +1,7 @@
 import express from 'express'
 
 import User from '../models/User.js'
-import { DataResponse, NotFoundResponse, MessageResponse, InternalErrorResponse } from '../common/reponses.js'
+import { DataResponse, NotFoundResponse, MessageResponse, InternalErrorResponse, ErrorResponse } from '../common/reponses.js'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 
@@ -71,7 +71,7 @@ router.post('/login', async (req, res) => {
             token: token
         }))
     } else {
-        res.json(MessageResponse('Invalid username or password'))
+        res.json(ErrorResponse(401, 'Invalid username or password'))
     }
 })
 

@@ -18,7 +18,10 @@ const server = express()
 const PORT = process.env.PORT || 3000
 
 // ===== Middlewares =====
-server.use(cors())
+server.use(cors({
+    origin: process.env.CLIENT_URL,
+    credentials: true,
+}))
 server.use(bodyParser.json())
 server.use(bodyParser.urlencoded({ extended: true }))
 server.use(cookieParser())
