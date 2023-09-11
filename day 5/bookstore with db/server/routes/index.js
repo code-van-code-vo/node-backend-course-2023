@@ -9,10 +9,10 @@ router.get('/', (req, res) => {
     res.json(MessageResponse('Welcome to my server'))
 })
 
-router.get('/do_something', requireRole('user'), (req, res) => {
+router.get('/whoami', requireRole('user'), (req, res) => {
     const userData = res.locals.userData
 
-    res.json(MessageResponse(`You are login as ${userData.username}`))
+    res.json(DataResponse(userData))
 })
 
 router.post('/upload', fileUpload(), (req, res) => {

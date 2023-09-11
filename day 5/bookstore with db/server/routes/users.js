@@ -7,6 +7,21 @@ import jwt from 'jsonwebtoken'
 
 const router = express.Router()
 
+function sendToken(res, user) {
+    const payload = {
+        id: user.id,
+        username: user.username,
+        role: user.role,
+    }
+    const token = jwt.sign(payload, process.env.SECRET, {
+        expiresIn: '3h'
+    })
+    res.cookie('token', token)
+    res.json(DataResponse({
+        token: token
+    }))
+}
+
 router.get('/', async (req, res) => {
     const users = await User.findAll()
     res.json(DataResponse(users))
@@ -32,8 +47,8 @@ router.post('/register', async (req, res) => {
             username: userData.username,
             password: hashPassword,
         })
-        console.log(user)
-        res.json(DataResponse(user))
+
+        sendToken(res, user)
     } catch(err) {
         console.log(err)
         res.json(InternalErrorResponse())
@@ -58,18 +73,7 @@ router.post('/login', async (req, res) => {
         user.password
     )
     if (isMatchPassword) {
-        const payload = {
-            id: user.id,
-            username: user.username,
-            role: user.role,
-        }
-        const token = jwt.sign(payload, process.env.SECRET, {
-            expiresIn: '3h'
-        })
-        res.cookie('token', token)
-        res.json(DataResponse({
-            token: token
-        }))
+        sendToken(res, user)
     } else {
         res.json(ErrorResponse(401, 'Invalid username or password'))
     }

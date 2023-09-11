@@ -7,14 +7,23 @@
     let errorMsg = ''
 
     async function handleLogin() {
-        console.log(username, password)
-        let res = await axios.post('http://localhost:3000/users/login', {
-            username: username,
-            password: password,
-        })
+        if (username === '' || password === '') {
+            errorMsg = 'Username or Password cannot be empty'
+            return
+        }
 
-        if (res.data.code === 200) {
-            window.location.href = '/'
+        try {
+            let res = await axios.post('http://localhost:3000/users/login', {
+                username: username,
+                password: password,
+            })
+            if (res.data.code === 200) {
+                window.location.href = '/'
+            }
+        } catch(err) {
+            let res = err.response
+            errorMsg = res.data.message
+            console.log(res.data)
         }
     }
 </script>
@@ -23,15 +32,20 @@
 
 <form>
     <input bind:value={username} type="text" placeholder="Enter username">
-    <input bind:value={password} type="text" placeholder="Enter password">
+    <input bind:value={password} type="password" placeholder="Enter password">
     <button on:click={handleLogin}>Login</button>
 </form>
-<p>Error: {errorMsg}</p>
+{#if errorMsg !== ''}
+    <p class="error-msg">Error: {errorMsg}</p>
+{/if}
 
 <style>
     input {
         display: block;
         margin: 10px 0;
         padding: 5px;
+    }
+    .error-msg {
+        color: red;
     }
 </style>
