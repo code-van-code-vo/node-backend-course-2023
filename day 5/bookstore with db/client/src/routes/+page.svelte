@@ -63,18 +63,19 @@
         You are login as {userData.username}.
         <button on:click={handleSignout}>Signout</button>
     </p>
+
+    <h2>Create books</h2>
+    <form>
+        <input bind:value={title} type="text" placeholder="Enter title">
+        <input bind:value={author} type="text" placeholder="Enter author">
+        <input bind:value={summary} type="text" placeholder="Enter summary">
+        <p>Thumbnail image: </p><input bind:files={thumbnailImage} type="file"><br><br>
+        <button on:click|preventDefault={handleAddBook}>Add</button>
+    </form>
 {:else}
     <p>You haven't login. <a href="/login">Login</a> now.</p>
 {/if}
 
-<h2>Create books</h2>
-<form>
-    <input bind:value={title} type="text" placeholder="Enter title">
-    <input bind:value={author} type="text" placeholder="Enter author">
-    <input bind:value={summary} type="text" placeholder="Enter summary">
-    <p>Thumbnail image: </p><input bind:files={thumbnailImage} type="file"><br><br>
-    <button on:click|preventDefault={handleAddBook}>Add</button>
-</form>
 <h2>List of books</h2>
 <div class="book-container">
     {#each books as book}
