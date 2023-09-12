@@ -28,6 +28,11 @@
         userData = {}
     }
 
+    async function handleDelete(bookId) {
+        let res = await axios.delete(`http://localhost:3000/books/${bookId}`)
+        fetchBooks()
+    }
+
     async function handleAddBook() {
         const formData = new FormData()
         formData.append('title', title)
@@ -70,7 +75,7 @@
         <input bind:value={author} type="text" placeholder="Enter author">
         <input bind:value={summary} type="text" placeholder="Enter summary">
         <p>Thumbnail image: </p><input bind:files={thumbnailImage} type="file"><br><br>
-        <button on:click|preventDefault={handleAddBook}>Add</button>
+        <button on:click={handleAddBook}>Add</button>
     </form>
 {:else}
     <p>You haven't login. <a href="/login">Login</a> now.</p>
@@ -82,6 +87,11 @@
     <div class='book-item'>
         <p>{book.title}</p> by <p class='book-author'>{book.author}</p><br>
         <img src="http://localhost:3000/{book.thumbnailImage}" alt="">
+        <div class='book-control'>
+            {#if userData.role === 'admin'}
+                <button on:click={() => handleDelete(book.id)}>Delete</button>
+            {/if}
+        </div>
     </div>
     {/each}
 </div>
@@ -94,11 +104,16 @@
         display: flex;
     }
     .book-item {
+        position: relative;
         border: 1px solid black;
         margin: 10px;
         padding: 15px;
         width: 300px;
         border-radius: 10px;
+    }
+    .book-control {
+        position: absolute;
+        bottom: 5px;
     }
     .book-author {
         color: red;
