@@ -33,7 +33,8 @@
 <form>
     <input bind:value={username} type="text" placeholder="Enter username">
     <input bind:value={password} type="password" placeholder="Enter password">
-    <button on:click={handleLogin}>Login</button>
+    <button on:click={handleLogin}>Login</button><br>
+    <a href="http://localhost:3000/auth/google">Login with Google</a>
 </form>
 {#if errorMsg !== ''}
     <p class="error-msg">Error: {errorMsg}</p>
