@@ -2,14 +2,15 @@
     import axios from "axios"
     axios.defaults.withCredentials = true
 
+    let email = ''
     let username = ''
     let password = ''
     let rePassword = ''
     let errorMsg = ''
 
     async function handleRegister() {
-        if (!username || !password) {
-            errorMsg = 'Username or Password cannot empty'
+        if (!username || !password || !email) {
+            errorMsg = 'Email, Username or Password cannot empty'
             return
         }
         if (password !== rePassword) {
@@ -20,6 +21,7 @@
         let res = null
         try {
             res = await axios.post('http://localhost:3000/users/register', {
+                email: email,
                 username: username,
                 password: password,
             })
@@ -38,6 +40,7 @@
 <h1>Register page</h1>
 
 <form>
+    <input bind:value={email} type="text" placeholder="Enter email">
     <input bind:value={username} type="text" placeholder="Enter username">
     <input bind:value={password} type="password" placeholder="Enter password">
     <input bind:value={rePassword} type="password" placeholder="Re-enter password">
