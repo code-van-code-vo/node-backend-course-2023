@@ -26,7 +26,6 @@ passport.use(new GoogleStrategy({
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     callbackURL: `${process.env.SERVER_URL}/auth/google/callback`
 }, (req, accessToken, refreshToken, profile, done) => {
-    console.log(profile)
     done(null, profile)
 }))
 server.use(passport.initialize())
