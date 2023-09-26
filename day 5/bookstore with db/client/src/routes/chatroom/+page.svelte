@@ -85,8 +85,9 @@
     </form>
     {#each messages as msg}
         <div>
-            <span>{msg.sender.username}: </span>
-            <span>{msg.content}</span>
+            <span class={"msg-sender " + (msg.sender.id === userData.id ? 'blue' : 'red')}>
+                {msg.sender.username}: </span>
+            <span class="msg-content">{msg.content}</span>
         </div>
     {:else}
         <p>There is no message</p>
@@ -97,3 +98,15 @@
         <button on:click={connectWebSocket}>Connect</button>
     </form>
 {/if}
+
+<style>
+    .msg-sender {
+        font-weight: bold;
+    }
+    .blue {
+        color: blue;
+    }
+    .red {
+        color: red;
+    }
+</style>
