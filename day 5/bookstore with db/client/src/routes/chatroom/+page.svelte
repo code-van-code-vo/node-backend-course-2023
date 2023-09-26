@@ -27,6 +27,7 @@
                 roomName: roomName,
             }
         })
+        console.log(socket.connected)
 
         socket.on(SEND_MESSAGE_EVENT, msg => {
             messages = [...messages, msg]
