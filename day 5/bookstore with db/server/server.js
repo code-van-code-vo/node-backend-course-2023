@@ -15,6 +15,7 @@ import bookRouter from './routes/books.js'
 import userRouter from './routes/users.js'
 import orderRouter from './routes/orders.js'
 import authRouter from './routes/auth.js'
+import { Server as WSServer } from 'socket.io'
 
 // ===== Config =====
 const server = express()
@@ -47,6 +48,27 @@ server.use('/users', userRouter)
 server.use('/orders', orderRouter)
 server.use('/auth', authRouter)
 
-server.listen(PORT, () => {
+const serverInstance = server.listen(PORT, () => {
     console.log(`Server is listening at PORT=${PORT}`)
+})
+
+const io = new WSServer(serverInstance, {
+    cors: '*'
+})
+
+const SEND_MESSAGE_EVENT = 'send message'
+
+io.on('connection', socket => {
+    console.log(`${socket.id} connected`)
+
+    socket.emit(SEND_MESSAGE_EVENT, 'hello someone')
+
+    socket.on(SEND_MESSAGE_EVENT, msg => {
+        socket.broadcast.emit(SEND_MESSAGE_EVENT, msg)
+        console.log('Message:', msg)
+    })
+
+    socket.on('disconnect', () => {
+        console.log(`${socket.id} disconnected`)
+    })
 })
