@@ -7,6 +7,7 @@
     let roomName = ''
     let isConnected = false
 
+    let inputMessageDom
     let messages = []
     let message = ''
     let socket
@@ -14,10 +15,18 @@
     function handleSubmit() {
         socket.emit(SEND_MESSAGE_EVENT, message)
         messages = [...messages, message]
+        message = ''
+        setTimeout(() => {
+            inputMessageDom.focus()
+        }, 10)
     }
 
     function connectWebSocket() {
-        socket = io('ws://localhost:3000')
+        socket = io.connect('ws://localhost:3000', {
+            query: {
+                roomName: roomName,
+            }
+        })
 
         socket.on(SEND_MESSAGE_EVENT, msg => {
             messages = [...messages, msg]
@@ -33,8 +42,9 @@
 <h1>Chatroom</h1>
 
 {#if isConnected}
+    <p>Room name: <b>{roomName}</b></p>
     <form>
-        <input bind:value={message} type="text" placeholder="Type message here">
+        <input bind:value={message} bind:this={inputMessageDom} type="text" placeholder="Type message here">
         <input on:click={handleSubmit} type="submit">
     </form>
     {#each messages as msg}

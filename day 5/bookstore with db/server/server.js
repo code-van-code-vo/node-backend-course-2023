@@ -58,13 +58,23 @@ const io = new WSServer(serverInstance, {
 
 const SEND_MESSAGE_EVENT = 'send message'
 
-io.on('connection', socket => {
+io
+.use((socket, next) => {
+    const roomName = socket.handshake.query.roomName
+
+    if (roomName) {
+        socket.join(roomName)
+        socket.data.roomName = roomName
+        next()
+    }
+})
+.on('connection', socket => {
+    const roomName = socket.data.roomName
+
     console.log(`${socket.id} connected`)
 
-    socket.emit(SEND_MESSAGE_EVENT, 'hello someone')
-
     socket.on(SEND_MESSAGE_EVENT, msg => {
-        socket.broadcast.emit(SEND_MESSAGE_EVENT, msg)
+        socket.to(roomName).emit(SEND_MESSAGE_EVENT, msg)
         console.log('Message:', msg)
     })
 
