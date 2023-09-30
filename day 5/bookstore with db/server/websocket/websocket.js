@@ -1,6 +1,7 @@
 
 import { Server as WSServer } from 'socket.io'
 import jwt from 'jsonwebtoken'
+import Message from '../models/Message.js'
     
 const SEND_MESSAGE_EVENT = 'send message'
 const INFORM_EVENT = 'inform'
@@ -39,7 +40,7 @@ export function initWebsocket(serverInstance) {
     
         console.log(`${socket.id} connected`)
     
-        socket.on(SEND_MESSAGE_EVENT, msg => {
+        socket.on(SEND_MESSAGE_EVENT, async msg => {
             const message = {
                 content: msg,
                 sender: {
@@ -47,9 +48,13 @@ export function initWebsocket(serverInstance) {
                     username: socket.data.username
                 }
             }
+            await Message.create({
+                content: msg,
+                senderId: socket.data.id,
+                roomName,
+            })
 
             socket.to(roomName).emit(SEND_MESSAGE_EVENT, message)
-            console.log('Message:', msg)
         })
     
         socket.on('disconnect', () => {

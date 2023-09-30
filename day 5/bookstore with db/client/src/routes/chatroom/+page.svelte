@@ -4,6 +4,8 @@
     import { io } from 'socket.io-client'
     import { onMount } from 'svelte'
     import jwtDecode from "jwt-decode";
+    import axios from 'axios'
+    axios.defaults.withCredentials = true
 
     const SEND_MESSAGE_EVENT = 'send message'
     const INFORM_EVENT = 'inform'
@@ -46,6 +48,7 @@
         socket.on('connect', () => {
             console.log('connected')
             isConnected = true
+            loadHistoryMessages()
         })
 
         socket.on('connect_error', error => {
@@ -62,6 +65,11 @@
         socket.on(SEND_MESSAGE_EVENT, msg => {
             messages = [...messages, msg]
         })
+    }
+
+    async function loadHistoryMessages() {
+        const res = await axios.get(`http://localhost:3000/messages/${roomName}`)
+        messages = res.data.data
     }
 
     onMount(() => {

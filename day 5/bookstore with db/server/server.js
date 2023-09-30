@@ -15,6 +15,7 @@ import bookRouter from './routes/books.js'
 import userRouter from './routes/users.js'
 import orderRouter from './routes/orders.js'
 import authRouter from './routes/auth.js'
+import messageRouter from './routes/messages.js'
 import { initWebsocket } from './websocket/websocket.js'
 
 // ===== Config =====
@@ -47,6 +48,7 @@ server.use('/books', bookRouter)
 server.use('/users', userRouter)
 server.use('/orders', orderRouter)
 server.use('/auth', authRouter)
+server.use('/messages', messageRouter)
 
 const serverInstance = server.listen(PORT, () => {
     console.log(`Server is listening at PORT=${PORT}`)
