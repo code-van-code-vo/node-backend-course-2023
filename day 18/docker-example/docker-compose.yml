@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  mysqldb:
+    image: mysql:8
+    restart: unless-stopped
+    environment:
+      - MYSQL_ROOT_PASSWORD=123456789
+      - MYSQL_DATABASE=node_bookstore
+    ports:
+      - 3308:3306
+    volumes:
+      - db:/var/lib/mysql
+  app:
+    restart: unless-stopped
+    depends_on:
+      - mysqldb
+    build: ./
+    ports:
+      - 1234:4000
+    environment:
+        - MYSQL_DB=node_bookstore
+        - MYSQL_USERNAME=root
+        - MYSQL_PASSWORD=123456789
+        - MYSQL_HOST=mysqldb
+        - MYSQL_PORT=3306
+    stdin_open: true
+    tty: true
+
+volumes: 
+  db:
