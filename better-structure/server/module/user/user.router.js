@@ -10,7 +10,7 @@ import { loginValidation, registerValidation } from './user.validation.js'
 import { fieldValidator } from '../../common/middleware/fieldValidator.middleware.js'
 import { deleteUser, findUser, getAllUsers, register, sendRegisterEmail } from './user.service.js'
 import { paginationValidation } from '../../common/validation/pagination.validation.js'
-import { idParamValidation } from '../../common/validation/id.validation.js'
+import { idParamValidation } from '../../common/validation/idParam.validation.js'
 
 const router = express.Router()
 

@@ -1,7 +1,9 @@
 import { validationResult } from "express-validator"
 import { Response } from "../responses.js"
 
-export function fieldValidator(validations) {
+export function fieldValidator(...validationInputs) {
+    const validations = validationInputs.flat()
+
     return async (req, res, next) => {
         for (let validation of validations) {
             const result = await validation.run(req)
