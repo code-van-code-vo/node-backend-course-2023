@@ -28,6 +28,13 @@ export async function findUser(fields) {
     }
 }
 
+export async function deleteUser(id) {
+    const result = await User.destroy({
+        where: { id }
+    })
+    return result
+}
+
 export async function sendRegisterEmail(username, email, password) {
     const hashPassword = await bcrypt.hash(password, 10)
     const data = {

@@ -8,8 +8,9 @@ import { requireRole } from '../../common/middleware/auth.middleware.js'
 import { setUserJWT } from './user.helper.js'
 import { loginValidation, registerValidation } from './user.validation.js'
 import { fieldValidator } from '../../common/middleware/fieldValidator.middleware.js'
-import { findUser, getAllUsers, register, sendRegisterEmail } from './user.service.js'
+import { deleteUser, findUser, getAllUsers, register, sendRegisterEmail } from './user.service.js'
 import { paginationValidation } from '../../common/validation/pagination.validation.js'
+import { idParamValidation } from '../../common/validation/id.validation.js'
 
 const router = express.Router()
 
@@ -57,7 +58,6 @@ router.get('/confirm_register', async (req, res) => {
 
 router.post('/login', fieldValidator(loginValidation), async (req, res) => {
     const userData = req.body
-    console.log(userData)
 
     const user = await findUser({
         username: userData.username,
@@ -76,12 +76,10 @@ router.post('/login', fieldValidator(loginValidation), async (req, res) => {
     }
 })
 
-router.delete('/:id', requireRole('admin'), async (req, res) => {
-    const id = parseInt(req.params.id)
+router.delete('/:id', requireRole('admin'), fieldValidator(idParamValidation), async (req, res) => {
+    const id = req.params.id
 
-    const result = await User.destroy({
-        where: { id }
-    })
+    const result = await deleteUser(id)
     if (result === 0) {
         res.json(NotFoundResponse())
     } else {
@@ -89,8 +87,8 @@ router.delete('/:id', requireRole('admin'), async (req, res) => {
     }
 })
 
-router.get('/:id', requireRole('admin'), async (req, res) => {
-    const id = parseInt(req.params.id)
+router.get('/:id', requireRole('admin'), fieldValidator(idParamValidation), async (req, res) => {
+    const id = req.params.id
 
     const user = await findUser({ id })
     res.json(DataResponse(user))
