@@ -3,8 +3,11 @@ import { encrypt } from "../../common/utils/crypto.helper.js"
 import { sendEmail } from "../../common/utils/sendEmail.helper.js"
 import { User } from "./user.model.js"
 
-export async function getAllUsers() {
-    const users = await User.findAll()
+export async function getAllUsers(page, limit) {
+    const users = await User.findAll({
+        limit: limit,
+        offset: (page-1)*limit,
+    })
     return users
 }
 

@@ -9,12 +9,16 @@ import { setUserJWT } from './user.helper.js'
 import { loginValidation, registerValidation } from './user.validation.js'
 import { fieldValidator } from '../../common/middleware/fieldValidator.middleware.js'
 import { findUser, getAllUsers, register, sendRegisterEmail } from './user.service.js'
+import { paginationValidation } from '../../common/validation/pagination.validation.js'
 
 const router = express.Router()
 
-router.get('/', async (req, res) => {
-    const users = await getAllUsers()
-    res.json(DataResponse(users))
+router.get('/', fieldValidator(paginationValidation), async (req, res) => {
+    const page = req.query.page
+    const limit = req.query.limit
+
+    const users = await getAllUsers(page, limit)
+    res.json(DataResponse(users, { page, limit }))
 })
 
 router.post('/register', fieldValidator(registerValidation), async (req, res) => {
