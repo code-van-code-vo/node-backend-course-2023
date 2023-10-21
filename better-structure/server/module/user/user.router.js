@@ -34,7 +34,9 @@ router.post('/register', fieldValidator(registerValidation), async (req, res) =>
             res.json(ErrorResponse(400, 'username or email already exist'))
             return;
         }
-        sendRegisterEmail(userData.username, userData.email, userData.password)
+        sendRegisterEmail(userData.username, userData.email, userData.password, () => {
+            res.json(DataResponse('Check your email'))
+        })
     } catch(err) {
         console.log(err)
         res.json(InternalErrorResponse())
@@ -46,7 +48,11 @@ router.get('/confirm_register', async (req, res) => {
 
     try {
         const data = decrypt(code)
-        const user = register(data)
+        const user = await register(data)
+        if (user == null) {
+            res.json(UnauthorizedResponse())
+            return;
+        }
 
         setUserJWT(res, user)
         res.redirect(process.env.CLIENT_URL)
